@@ -74,6 +74,7 @@ Input::Input(TileMap* m, Hero& h) : map(m), hero(h), mode(PlayerMode::Move) {
     
 } 
 
+//@TODO - refactor this monstrosity :D 
 void Input::handleActions() {
     if (mode == PlayerMode::Move) {
         if (playerInput == 'a' && hero.y > 0 && (map->map[hero.x][hero.y - 1].tType == TileType::Dirt || map->map[hero.x][hero.y - 1].tType == TileType::Door || map->map[hero.x][hero.y - 1].tType == TileType::Floor)) {// a

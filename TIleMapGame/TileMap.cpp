@@ -25,6 +25,10 @@ TileMap::TileMap(int r, int c, MapParameters* mp, WINDOW* win, Hero& h) : rows(r
 
              randomInt = rand() % 100;
            
+             //@TODO redo the entire loop - after creating entire map
+             //in the next step apply the resources using various algorithms
+             //perlin for water and some random shit for other stuff 
+
      /*       if (randomInt <= mp->treeSpawnChance && resources < mp->totalResourceSpawns) {
                 resources++;
 
