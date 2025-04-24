@@ -46,10 +46,10 @@ int main(){
    
     //int totalResources = ((max_x - 5) * (max_y - 5)) / 5;
     MapParameters* mapParams = new MapParameters
-    (25, 18, 4, 10,
-     10, 5, 3, 6, 
-     2, 3, 
-     0);
+    (25, 18, 4, 10,   // tree spawn chance, big tree spawn chance, tree yield, big tree yield
+     10, 5, 3, 6,     // rock spawn chance, big rock spawn chance, rock yield, big rock yield 
+     2, 3,            // water spawn chance, water yield
+     0);              // total resources - unused now
 
     TileMap* tileMap = new TileMap(max_x - 5, max_y - 5, mapParams, window->mapWin, hero);
     delete mapParams;
