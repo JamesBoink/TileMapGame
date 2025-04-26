@@ -1,9 +1,15 @@
 #include "TileMap.h"
+#include "Hero.h"
+#include "PlayerMode.h"
+#include "Tile.h"
+#include "curses.h" 
+#include "BuildingType.h"
+#include "MapParameters.h"
+
 #include <stdlib.h>
 #include <iostream>
 
-
-TileMap::TileMap(int r, int c, MapParameters* mp, WINDOW* win, Hero& h) : rows(r), columns(c), hero(h) {
+TileMap::TileMap(int r, int c, MapParameters& mp, WINDOW* win, Hero& h) : rows(r), columns(c), hero(h) {
     map = new Tile * [columns];
     int randomInt = 0;
     
@@ -29,48 +35,48 @@ TileMap::TileMap(int r, int c, MapParameters* mp, WINDOW* win, Hero& h) : rows(r
              //in the next step apply the resources using various algorithms
              //perlin for water and some random shit for other stuff 
 
-     /*       if (randomInt <= mp->treeSpawnChance && resources < mp->totalResourceSpawns) {
+     /*       if (randomInt <= mp.treeSpawnChance && resources < mp.totalResourceSpawns) {
                 resources++;
 
-                if (randomInt < mp->treeSpawnChance && randomInt >  mp->bigTreeSpawnChance) {
-                    map[x][y].assignTileData(x, y, TileType::Tree, 't', 5, mp->treeYield);
+                if (randomInt < mp.treeSpawnChance && randomInt >  mp.bigTreeSpawnChance) {
+                    map[x][y].assignTileData(x, y, TileType::Tree, 't', 5, mp.treeYield);
                     waddch(mapWin, int('t') | COLOR_PAIR(5));
                 }
-                else if (randomInt < mp->bigTreeSpawnChance && randomInt > mp->rockSpawnChance) {
-                    map[x][y].assignTileData(x, y, TileType::Tree, 'T', 5, mp->bigTreeYield);
+                else if (randomInt < mp.bigTreeSpawnChance && randomInt > mp.rockSpawnChance) {
+                    map[x][y].assignTileData(x, y, TileType::Tree, 'T', 5, mp.bigTreeYield);
                     waddch(mapWin, int('T') | COLOR_PAIR(5) | A_BOLD);
                 }
-                else if (randomInt < mp->rockSpawnChance && randomInt > mp->bigRockSpawnChance) {
-                    map[x][y].assignTileData(x, y, TileType::Rock, 'r', 6, mp->rockYield);
+                else if (randomInt < mp.rockSpawnChance && randomInt > mp.bigRockSpawnChance) {
+                    map[x][y].assignTileData(x, y, TileType::Rock, 'r', 6, mp.rockYield);
                     waddch(mapWin, int('r') | COLOR_PAIR(6));
                 }
-                else if (randomInt < mp->bigRockSpawnChance && randomInt > mp->waterSpawnChance) {
-                    map[x][y].assignTileData(x, y, TileType::Rock, 'R', 6, mp->bigRockYield);
+                else if (randomInt < mp.bigRockSpawnChance && randomInt > mp.waterSpawnChance) {
+                    map[x][y].assignTileData(x, y, TileType::Rock, 'R', 6, mp.bigRockYield);
                     waddch(mapWin, int('R') | COLOR_PAIR(6) | A_BOLD);
                 }
-                else if (randomInt < mp->waterSpawnChance) {
-                    map[x][y].assignTileData(x, y, TileType::Water, 'w', 5, mp->waterYield);
+                else if (randomInt < mp.waterSpawnChance) {
+                    map[x][y].assignTileData(x, y, TileType::Water, 'w', 5, mp.waterYield);
                     waddch(mapWin, int('w') | COLOR_PAIR(9)); 
                 }
             }*/
-            if (randomInt < mp->treeSpawnChance && randomInt >  mp->bigTreeSpawnChance) {
-                map[x][y].assignTileData(x, y, TileType::Tree, 't', 5, mp->treeYield);
+            if (randomInt < mp.treeSpawnChance && randomInt >  mp.bigTreeSpawnChance) {
+                map[x][y].assignTileData(x, y, TileType::Tree, 't', 5, mp.treeYield);
                 waddch(mapWin, int('t') | COLOR_PAIR(5));
             }
-            else if (randomInt < mp->bigTreeSpawnChance && randomInt > mp->rockSpawnChance) {
-                map[x][y].assignTileData(x, y, TileType::Tree, 'T', 5, mp->bigTreeYield);
+            else if (randomInt < mp.bigTreeSpawnChance && randomInt > mp.rockSpawnChance) {
+                map[x][y].assignTileData(x, y, TileType::Tree, 'T', 5, mp.bigTreeYield);
                 waddch(mapWin, int('T') | COLOR_PAIR(5) | A_BOLD);
             }
-            else if (randomInt < mp->rockSpawnChance && randomInt > mp->bigRockSpawnChance) {
-                map[x][y].assignTileData(x, y, TileType::Rock, 'r', 6, mp->rockYield);
+            else if (randomInt < mp.rockSpawnChance && randomInt > mp.bigRockSpawnChance) {
+                map[x][y].assignTileData(x, y, TileType::Rock, 'r', 6, mp.rockYield);
                 waddch(mapWin, int('r') | COLOR_PAIR(6));
             }
-            else if (randomInt < mp->bigRockSpawnChance && randomInt > mp->waterSpawnChance) {
-                map[x][y].assignTileData(x, y, TileType::Rock, 'R', 6, mp->bigRockYield);
+            else if (randomInt < mp.bigRockSpawnChance && randomInt > mp.waterSpawnChance) {
+                map[x][y].assignTileData(x, y, TileType::Rock, 'R', 6, mp.bigRockYield);
                 waddch(mapWin, int('R') | COLOR_PAIR(6) | A_BOLD);
             }
-            else if (randomInt < mp->waterSpawnChance) {
-                map[x][y].assignTileData(x, y, TileType::Water, 'w', 5, mp->waterYield);
+            else if (randomInt < mp.waterSpawnChance) {
+                map[x][y].assignTileData(x, y, TileType::Water, 'w', 5, mp.waterYield);
                 waddch(mapWin, int('w') | COLOR_PAIR(9));
             }
             else {

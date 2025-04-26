@@ -7,7 +7,6 @@
 #include "Input.h"
 #include "DisplayWindow.h"
 #include "Hero.h"
-#include "ColorPairs.h"
 
 int main(){
     initscr();      // Initialize the screen
@@ -39,20 +38,19 @@ int main(){
     int max_y, max_x;
     getmaxyx(stdscr, max_y, max_x);  // Gets terminal dimensions      
        
-    DisplayWindow* window = new DisplayWindow(max_y, max_x);
+    DisplayWindow window(max_y, max_x);
    
     Hero hero;
     hero.initialize();
    
     //int totalResources = ((max_x - 5) * (max_y - 5)) / 5;
-    MapParameters* mapParams = new MapParameters
+    MapParameters mapParams
     (25, 18, 4, 10,   // tree spawn chance, big tree spawn chance, tree yield, big tree yield
      10, 5, 3, 6,     // rock spawn chance, big rock spawn chance, rock yield, big rock yield 
      2, 3,            // water spawn chance, water yield
      0);              // total resources - unused now
 
-    TileMap* tileMap = new TileMap(max_x - 5, max_y - 5, mapParams, window->mapWin, hero);
-    delete mapParams;
+    TileMap tileMap(max_x - 5, max_y - 5, mapParams, window.mapWin, hero);
 
     Input input(tileMap, hero);
 
@@ -61,25 +59,22 @@ int main(){
         //since quitting is dependent on 'q' button
         //listen to player input and make it decisive of game running
         isRunning = input.handleInput();
-        tileMap->updatePlayerPosition();
+        tileMap.updatePlayerPosition();
 
-        mvwprintw(window->mainWin, 0, 0, "                                    ");  // Clear with spaces
-        mvwprintw(window->mainWin, 1, 0, "                                    ");
-        mvwprintw(window->mainWin, 0, 0, "Wood: %d", hero.wood);
-        mvwprintw(window->mainWin, 1, 0, "Stones: %d", hero.stone);
-        mvwprintw(window->mainWin, 2, 0, "Water: %d", hero.water);
-        mvwprintw(window->mainWin, 0, 15, "Mode: %s", hero.getMode());
-        mvwprintw(window->mainWin, 1, 15, "Build: %s", hero.getBuild());
+        mvwprintw(window.mainWin, 0, 0, "                                    ");  // Clear with spaces
+        mvwprintw(window.mainWin, 1, 0, "                                    ");
+        mvwprintw(window.mainWin, 0, 0, "Wood: %d", hero.wood);
+        mvwprintw(window.mainWin, 1, 0, "Stones: %d", hero.stone);
+        mvwprintw(window.mainWin, 2, 0, "Water: %d", hero.water);
+        mvwprintw(window.mainWin, 0, 15, "Mode: %s", hero.getMode());
+        mvwprintw(window.mainWin, 1, 15, "Build: %s", hero.getBuild());
 
 
 
-        wrefresh(window->mainWin);
-        wrefresh(window->mapWin);
+        wrefresh(window.mainWin);
+        wrefresh(window.mapWin);
         refresh();
     }
-
-    delete tileMap;
-    delete window;
     clear();
     endwin();
 

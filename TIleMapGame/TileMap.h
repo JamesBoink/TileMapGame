@@ -1,10 +1,8 @@
 #pragma once
-#include "Tile.h"
-#include "curses.h" 
-#include "Hero.h"
-#include "BuildingType.h"
-#include "MapParameters.h"
-
+class Tile;
+class Hero;
+class MapParameters;
+typedef WINDOW;
 
 class TileMap {
 private:
@@ -22,7 +20,7 @@ public:
 
 
 	//Constructor without default values
-	TileMap(int rows, int columns, MapParameters* mP, WINDOW* win, Hero& h);
+	TileMap(int rows, int columns, MapParameters& mP, WINDOW* win, Hero& h);
 	//Destructor that cleans up the tilemap
 	~TileMap();
 	void updatePlayerPosition();

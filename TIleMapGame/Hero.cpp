@@ -1,4 +1,6 @@
 #include "Hero.h"
+#include "BuildingType.h"
+#include "PlayerMode.h"
 
 void Hero::initialize() {
 	x = 5;

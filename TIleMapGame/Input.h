@@ -1,17 +1,18 @@
 #pragma once
-#include "TileMap.h"
-#include "Hero.h"
-#include "PlayerMode.h"
+
+class TileMap;
+class Hero;
+enum class PlayerMode;
 
 class Input {
 public:
 	char playerInput;
-	TileMap* map;
+	TileMap& map;
     Hero& hero;
 
 	PlayerMode mode;
 	
-	Input(TileMap* m, Hero& h);
+	Input(TileMap& m, Hero& h);
 	bool handleInput();
 	void handleActions();
 };

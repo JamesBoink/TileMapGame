@@ -1,6 +1,7 @@
 #pragma once
-#include "BuildingType.h"
-#include "PlayerMode.h"
+
+enum class BuildingType;
+enum class PlayerMode;
 
 class Hero {
 public:
