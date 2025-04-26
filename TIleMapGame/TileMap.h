@@ -1,8 +1,9 @@
 #pragma once
+#include"curses.h"
+
 class Tile;
 class Hero;
 class MapParameters;
-typedef WINDOW;
 
 class TileMap {
 private:

@@ -6,6 +6,7 @@
 
 #include "Hero.h"
 #include "PlayerMode.h"
+#include "BuildingType.h"
 
 #include "curses.h"
 
