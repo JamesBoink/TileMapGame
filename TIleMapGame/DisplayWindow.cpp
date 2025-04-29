@@ -23,7 +23,3 @@ DisplayWindow::~DisplayWindow() {
 	delete mainWin;
 	delete mapWin;
 }
-
-void DisplayWindow::createWindow() {
-
-}

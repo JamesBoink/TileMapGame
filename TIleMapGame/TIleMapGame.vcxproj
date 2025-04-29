@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="BuildingType.h" />
     <ClInclude Include="DisplayWindow.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="MapParameters.h" />
     <ClInclude Include="PlayerMode.h" />
     <ClInclude Include="Hero.h" />

@@ -10,5 +10,4 @@ public:
 
 	DisplayWindow(int, int);
 	~DisplayWindow();
-	void createWindow();
 };

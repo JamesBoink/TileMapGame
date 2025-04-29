@@ -9,6 +9,7 @@
 #include "Hero.h"
 
 int main(){
+
     initscr();      // Initialize the screen
     start_color();  // Enable colors
     cbreak();       // Line buffering disabled
@@ -34,10 +35,14 @@ int main(){
     init_pair(5, COLOR_GREEN, COLOR_BLACK);    // Tree
     init_pair(6, COLOR_WHITE, COLOR_BLACK);    // Rock
     init_pair(9, COLOR_BLUE, COLOR_BLUE);     // Water
-
+   
+    refresh();
+    mvwprintw(stdscr, 0, 0, "Press any button to start...");    // blocking and starting like this ensures proper char and window rendering
+    getch();
+  
+    
     int max_y, max_x;
     getmaxyx(stdscr, max_y, max_x);  // Gets terminal dimensions      
-       
     DisplayWindow window(max_y, max_x);
    
     Hero hero;
@@ -54,12 +59,13 @@ int main(){
 
     Input input(tileMap, hero);
 
+
+    refresh();
+
     bool isRunning = true;
     while (isRunning) {
         //since quitting is dependent on 'q' button
         //listen to player input and make it decisive of game running
-        isRunning = input.handleInput();
-        tileMap.updatePlayerPosition();
 
         mvwprintw(window.mainWin, 0, 0, "                                    ");  // Clear with spaces
         mvwprintw(window.mainWin, 1, 0, "                                    ");
@@ -68,13 +74,14 @@ int main(){
         mvwprintw(window.mainWin, 2, 0, "Water: %d", hero.water);
         mvwprintw(window.mainWin, 0, 15, "Mode: %s", hero.getMode());
         mvwprintw(window.mainWin, 1, 15, "Build: %s", hero.getBuild());
-
-
-
         wrefresh(window.mainWin);
+ 
+
+        isRunning = input.handleInput();
+        tileMap.updatePlayerPosition();
         wrefresh(window.mapWin);
-        refresh();
     }
+
     clear();
     endwin();
 

@@ -16,23 +16,20 @@ bool Input::handleInput() {
     map.oldHeroX = hero.x;
     map.oldHeroY = hero.y;
 
-	playerInput = getch();
-	if (playerInput == 'q') {
-		return false;
-	}
-
-    if (playerInput == 'm') {
-        // changing mode to move
-        mode = PlayerMode::Move;
-        
-        wmove(map.mapWin, hero.x, hero.y);
-        waddch(map.mapWin, int('@') | COLOR_PAIR(3) | A_BOLD);
+    playerInput = getch();
+    if (playerInput == 'q') {
+        return false;
     }
 
-    if (playerInput == 'b') {
+    switch (playerInput) {
+    case 'm':
+        mode = PlayerMode::Move;
         wmove(map.mapWin, hero.x, hero.y);
+        waddch(map.mapWin, int('@') | COLOR_PAIR(3) | A_BOLD);
+        break;
 
-        // changing mode to build
+    case 'b':
+        wmove(map.mapWin, hero.x, hero.y);
         if (mode == PlayerMode::Build) {
             mode = PlayerMode::Move;
             waddch(map.mapWin, int('@') | COLOR_PAIR(3) | A_BOLD);
@@ -41,13 +38,10 @@ bool Input::handleInput() {
             mode = PlayerMode::Build;
             waddch(map.mapWin, int('@') | COLOR_PAIR(8) | A_BOLD);
         }
+        break;
 
-    }
-
-    if (playerInput == 'g') {
+    case 'g':
         wmove(map.mapWin, hero.x, hero.y);
-
-        // changing mode to gather
         if (mode == PlayerMode::Gather) {
             mode = PlayerMode::Move;
             waddch(map.mapWin, int('@') | COLOR_PAIR(3) | A_BOLD);
@@ -56,27 +50,29 @@ bool Input::handleInput() {
             mode = PlayerMode::Gather;
             waddch(map.mapWin, int('@') | COLOR_PAIR(7) | A_BOLD);
         }
-    }
+        break;
 
-    if (playerInput == '1') {
+    case '1':
         hero.buildingType = BuildingType::WoodWall;
-    }
-    if (playerInput == '2') {
+        break;
+
+    case '2':
         hero.buildingType = BuildingType::WoodDoor;
-    }
-    if (playerInput == '3') {
+        break;
+
+    case '3':
         hero.buildingType = BuildingType::StoneWall;
-    }
-    if (playerInput == '4') {
+        break;
+
+    case '4':
         hero.buildingType = BuildingType::Floor;
+        break;
     }
 
     hero.mode = mode;
-
     handleActions();
-   
 
-	return true;
+    return true;
 }
 
 Input::Input(TileMap& m, Hero& h) : map(m), hero(h), mode(PlayerMode::Move) {
@@ -85,46 +81,40 @@ Input::Input(TileMap& m, Hero& h) : map(m), hero(h), mode(PlayerMode::Move) {
 
 //@TODO - refactor this monstrosity :D 
 void Input::handleActions() {
+    int dx = 0, dy = 0;
+
+    switch (playerInput) {
+    case 'a': dy = -1; break;
+    case 'd': dy = 1; break;
+    case 'w': dx = -1; break;
+    case 's': dx = 1; break;
+    default: return; // Invalid input, do nothing
+    }
+
+    int newX = hero.x + dx;
+    int newY = hero.y + dy;
+
+    // Safety check
+    if (newX < 0 || newY < 0 || newX >= map.columns || newY >= map.rows)
+        return;
+
+    TileType targetTile = map.map[newX][newY].tType;
+
     if (mode == PlayerMode::Move) {
-        if (playerInput == 'a' && hero.y > 0 && (map.map[hero.x][hero.y - 1].tType == TileType::Dirt || map.map[hero.x][hero.y - 1].tType == TileType::Door || map.map[hero.x][hero.y - 1].tType == TileType::Floor)) {// a
-            hero.y -= 1;
-        }
-        if (playerInput == 'd' && hero.y < map.rows - 1 && (map.map[hero.x][hero.y + 1].tType == TileType::Dirt|| map.map[hero.x][hero.y + 1].tType == TileType::Door || map.map[hero.x][hero.y + 1].tType == TileType::Floor)) {//d
-            hero.y++;
-        }
-        if (playerInput == 'w' && hero.x > 0 && (map.map[hero.x - 1][hero.y].tType == TileType::Dirt || map.map[hero.x - 1][hero.y].tType == TileType::Door || map.map[hero.x - 1][hero.y].tType == TileType::Floor)) {//w
-            hero.x -= 1;
-        }
-        if (playerInput == 's' && hero.x < map.columns - 1 && (map.map[hero.x + 1][hero.y].tType == TileType::Dirt || map.map[hero.x + 1][hero.y].tType == TileType::Door || map.map[hero.x + 1][hero.y].tType == TileType::Floor)) {// s
-            hero.x++;
+        if (targetTile == TileType::Dirt || targetTile == TileType::Door || targetTile == TileType::Floor) {
+            hero.x = newX;
+            hero.y = newY;
         }
     }
     else if (mode == PlayerMode::Gather) {
-        if (playerInput == 'a' &&  map.map[hero.x][hero.y - 1].tType != TileType::Dirt) {// a
-            map.gather(hero.x, hero.y - 1);
-        }
-        if (playerInput == 'd' &&  map.map[hero.x][hero.y + 1].tType != TileType::Dirt) {//d
-            map.gather(hero.x, hero.y + 1);
-        }
-        if (playerInput == 'w' &&  map.map[hero.x - 1][hero.y].tType != TileType::Dirt) {//w
-            map.gather(hero.x - 1, hero.y);
-        }
-        if (playerInput == 's' &&  map.map[hero.x + 1][hero.y].tType != TileType::Dirt) {// s
-            map.gather(hero.x + 1, hero.y);
+        if (targetTile != TileType::Dirt) {
+            map.gather(newX, newY);
         }
     }
-    else {
-        if (playerInput == 'a' && map.map[hero.x][hero.y - 1].tType == TileType::Dirt) {// a
-            map.build(hero.x, hero.y - 1);
-        }
-        if (playerInput == 'd' && map.map[hero.x][hero.y + 1].tType == TileType::Dirt) {//d
-            map.build(hero.x, hero.y + 1);
-        }
-        if (playerInput == 'w' && map.map[hero.x - 1][hero.y].tType == TileType::Dirt) {//w
-            map.build(hero.x - 1, hero.y);
-        }
-        if (playerInput == 's' && map.map[hero.x + 1][hero.y].tType == TileType::Dirt) {// s
-            map.build(hero.x + 1, hero.y);
+    else { // Build mode
+        if (targetTile == TileType::Dirt) {
+            map.build(newX, newY);
         }
     }
 }
+
